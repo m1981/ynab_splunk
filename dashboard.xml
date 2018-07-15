@@ -5,6 +5,16 @@
       <label>My time</label>
       <default>Year to date</default>
     </input>
+    <input type="radio" token="my_span" searchWhenChanged="false">
+      <label>Span</label>
+      <choice value="1week">Weekly</choice>
+      <choice value="1mon">Monthly</choice>
+      <default>1mon</default>
+      <initialValue>1mon</initialValue>
+     <change>
+         <set token="my_span">$value$</set>
+     </change>      
+    </input>
   </fieldset>
   <row>
     <panel>
@@ -108,7 +118,7 @@
       <chart>
         <title>Spendings &lt; 500zl</title>
         <search>
-          <query>index="ynab" NOT Payee="Transfer*" AND NOT Payee="Reconcil*" AND NOT "Category"="To be*" AND NOT Category="*Rent*" AND NOT "Category Group"="*Trave*" AND Outflow &lt; 500 | eval sum_out=round(Outflow,0) | timechart sum(sum_out) span=1week</query>
+          <query>index="ynab" NOT Payee="Transfer*" AND NOT Payee="Reconcil*" AND NOT "Category"="To be*" AND NOT Category="*Rent*" AND NOT "Category Group"="*Trave*" AND Outflow &lt; 500 | eval sum_out=round(Outflow,0) | timechart sum(sum_out) span=$my_span$</query>
           <earliest>$time_tok1.earliest$</earliest>
           <latest>$time_tok1.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -157,7 +167,7 @@
       <chart>
         <title>Spendings &gt;= 500zl</title>
         <search>
-          <query>index="ynab"  NOT Payee="Transfer*" AND NOT Payee="Reconcil*" AND NOT "Category"="To be*" AND NOT Category="*Rent*" AND NOT "Category Group"="*Trave*" AND Outflow &gt;= 500 | eval sum_out=round(Outflow,0) | timechart sum(sum_out) span=1week</query>
+          <query>index="ynab"  NOT Payee="Transfer*" AND NOT Payee="Reconcil*" AND NOT "Category"="To be*" AND NOT Category="*Rent*" AND NOT "Category Group"="*Trave*" AND Outflow &gt;= 500 | eval sum_out=round(Outflow,0) | timechart sum(sum_out) span=$my_span$</query>
           <earliest>$time_tok1.earliest$</earliest>
           <latest>$time_tok1.latest$</latest>
           <sampleRatio>1</sampleRatio>
@@ -249,9 +259,9 @@
       <chart>
         <title>Basic needs</title>
         <search>
-          <query>index="ynab" NOT Payee="Transfer*" AND NOT Payee="Reconcil*" AND NOT "Category"="To be*" AND NOT Category="*Rent*" AND NOT "Category Group"="*Trave*" AND "Category Group"="Basic needs" | eval Outflow=round(Outflow,0) | timechart span=1week sum(Outflow) as Outflow by Category</query>
-          <earliest>-3mon@mon</earliest>
-          <latest>now</latest>
+          <query>index="ynab" NOT Payee="Transfer*" AND NOT Payee="Reconcil*" AND NOT "Category"="To be*" AND NOT Category="*Rent*" AND NOT "Category Group"="*Trave*" AND "Category Group"="Basic needs" | eval Outflow=round(Outflow,0) | timechart span=$my_span$ sum(Outflow) as Outflow by Category</query>
+          <earliest>$time_tok1.earliest$</earliest>
+          <latest>$time_tok1.latest$</latest>
           <sampleRatio>1</sampleRatio>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
